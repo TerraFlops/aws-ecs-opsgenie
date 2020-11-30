@@ -43,7 +43,7 @@ resource "opsgenie_api_integration" "opsgenie_integration" {
     }
   }
   dynamic "responders" {
-    for_each = var.opsgenie_responding_teams
+    for_each = local.opsgenie_responding_teams
     content {
       type = "team"
       id = data.opsgenie_team.opsgenie_responding_teams[responders.key].id
