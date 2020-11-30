@@ -7,11 +7,6 @@ locals {
   alarm_name = var.alarm_name == null ? "${local.ecs_task_name}Ecs${var.statistic}${var.metric_name}${var.comparison}${var.threshold}In${var.evaluation_periods}PeriodsOf${var.period}" : var.alarm_name
 }
 
-# Retrieve the requested SQS queue
-data "aws_sqs_queue" "queue" {
-  name = var.queue_name
-}
-
 # Retrieve the requested Opsgenie users
 data "opsgenie_user" "opsgenie_responding_users" {
   for_each = var.opsgenie_responding_users
