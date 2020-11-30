@@ -1,5 +1,10 @@
-variable "queue_name" {
-  description = "Name of the SQS queue"
+variable "ecs_task_name" {
+  description = "Name of ECS task"
+  type = string
+}
+
+variable "ecs_cluster_name" {
+  description = "Name of ECS cluster"
   type = string
 }
 
@@ -11,7 +16,7 @@ variable "alarm_name" {
 
 variable "metric_name" {
   type = string
-  description = "CloudWatch SQS metric for alarm (e.g. ApproximateNumberOfMessagesVisible)"
+  description = "CloudWatch ECS metric for alarm (e.g. CPUUtilization)"
 }
 
 variable "treat_missing_data" {

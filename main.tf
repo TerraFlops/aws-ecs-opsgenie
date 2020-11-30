@@ -1,10 +1,10 @@
 # Convert integration name into snake case
 locals {
-  queue_name_snake = join("", [for element in split("-", lower(var.queue_name)) : title(element)])
-  
+  ecs_task_name = join("", [for element in split("_", lower(var.ecs_task_name)) : title(element)])
+
   # Create alarm name based on the trigger condition (hopefully prevent duplicates)
   # (e.g. PaymentGatewayAverageApproximateNumberOfMessagesVisibleGreaterThanOrEqualToThreshold10000In5Periods)
-  alarm_name = var.alarm_name == null ? "${local.queue_name_snake}Queue${var.statistic}${var.metric_name}${var.comparison}${var.threshold}In${var.evaluation_periods}PeriodsOf${var.period}" : var.alarm_name
+  alarm_name = var.alarm_name == null ? "${local.ecs_task_name}Ecs${var.statistic}${var.metric_name}${var.comparison}${var.threshold}In${var.evaluation_periods}PeriodsOf${var.period}" : var.alarm_name
 }
 
 # Retrieve the requested SQS queue
@@ -72,7 +72,7 @@ resource "aws_sns_topic_subscription" "message_age_alarm" {
 
 # Create CloudWatch alarm
 resource "aws_cloudwatch_metric_alarm" "alarm" {
-  namespace = "AWS/SQS"
+  namespace = "AWS/ECS"
   alarm_name = local.alarm_name
   comparison_operator = var.comparison
   metric_name = var.metric_name
@@ -81,9 +81,10 @@ resource "aws_cloudwatch_metric_alarm" "alarm" {
   period = var.period
   statistic = var.statistic
   threshold = var.threshold
-  # Link to the requested SQS queue
+  # Link to the requested ECS task/cluster
   dimensions = {
-    QueueName = data.aws_sqs_queue.queue.name
+    ServiceName = var.ecs_task_name
+    ClusterName = var.ecs_cluster_name
   }
   # Trigger the SNS topic on alarm
   alarm_actions = [
