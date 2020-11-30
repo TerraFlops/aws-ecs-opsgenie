@@ -1,6 +1,7 @@
 # Convert integration name into snake case
 locals {
   ecs_task_name = join("", [for element in split("_", lower(var.ecs_task_name)) : title(element)])
+  opsgenie_responding_teams = concat(var.opsgenie_responding_teams, var.opsgenie_owner_team)
 
   # Create alarm name based on the trigger condition (hopefully prevent duplicates)
   # (e.g. PaymentGatewayAverageApproximateNumberOfMessagesVisibleGreaterThanOrEqualToThreshold10000In5Periods)
@@ -110,7 +111,7 @@ resource "opsgenie_integration_action" "alarm" {
       }
     }
     dynamic "responders" {
-      for_each = var.opsgenie_responding_teams
+      for_each = local.opsgenie_responding_teams
       content {
         type = "team"
         id = data.opsgenie_team.opsgenie_responding_teams[responders.key].id
