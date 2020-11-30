@@ -16,7 +16,7 @@ data "opsgenie_user" "opsgenie_responding_users" {
 
 # Retrieve Opsgenie users
 data "opsgenie_team" "opsgenie_responding_teams" {
-  for_each = var.opsgenie_responding_teams
+  for_each = local.opsgenie_responding_teams
   name = each.value
 }
 
