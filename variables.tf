@@ -3,6 +3,12 @@ variable "ecs_task_name" {
   type = string
 }
 
+variable "description" {
+  description = "Optional alarm description override"
+  type = string
+  default = null
+}
+
 variable "ecs_cluster_name" {
   description = "Name of ECS cluster"
   type = string
