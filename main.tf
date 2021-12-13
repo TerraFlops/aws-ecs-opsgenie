@@ -109,7 +109,7 @@ resource "opsgenie_integration_action" "alarm" {
   }
   lifecycle {
     ignore_changes = [
-      create.responders
+      create[0].responders
     ]
   }  
 }
