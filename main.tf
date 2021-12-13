@@ -107,4 +107,9 @@ resource "opsgenie_integration_action" "alarm" {
       type = "match-all"
     }
   }
+  lifecycle {
+    ignore_changes = [
+      create.responders
+    ]
+  }  
 }
