@@ -49,6 +49,11 @@ resource "opsgenie_api_integration" "opsgenie_integration" {
       id = data.opsgenie_team.opsgenie_responding_teams[responders.key].id
     }
   }
+  lifecycle {
+    ignore_changes = [
+      responders
+    ]
+  }
 }
 
 # Create an SNS topic for the alarm
